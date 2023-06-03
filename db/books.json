@@ -1,0 +1,14 @@
+{
+    "books": [
+        {
+            "id": "1", 
+            "name": "First", 
+            "price": "1000", 
+            "description": "First description",
+            "imgURL": "./img/1.webp"
+        },
+        {"id": "2", "name": "Second", "price": "500", "description": "Second description", "imgURL": "./img/2.webp"},
+        {"id": "3", "name": "Third", "price": "200", "description": "Third description", "imgURL": "./img/3.webp"},
+        {"id": "4", "name": "Four", "price": "100", "description": "Four description", "imgURL": "./img/4.webp"}
+    ]
+}
