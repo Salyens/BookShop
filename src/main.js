@@ -1,4 +1,5 @@
 import { BookElement } from "./BookElement.js";
+import { Basket } from "./Basket.js";
 class BookShop {
   booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket")) || {
     sum: 0,
@@ -27,6 +28,20 @@ class BookShop {
     return bookElement.getBook;
   }
 
+  getBasketItems(books) {
+    const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"))
+    const bookIds = Object.keys(booksIdInBasket);
+    const filteredBooks = books.filter(book => bookIds.includes(book.id));
+    const booksListInBasket = filteredBooks.map((book) => {
+      const amount = booksIdInBasket[book.id];
+      book['amount'] = amount;
+      return book;
+    })
+    const {abc} = this;
+    const basket = new Basket(books, abc);
+    console.log(basket.f());
+  }
+
   async getData() {
     const result = await fetch(this.apiBaseURL);
     let json;
@@ -41,10 +56,15 @@ class BookShop {
     this.basketCounter.style.cssText = "display: flex;";
   }
 
+  abc() {
+    console.log('abc')
+  }
+
   async start() {
     if (this.booksIdInBasket.sum) this.displayItemsInBasket();
     const books = await this.getData();
     this.createInitialHTML(books);
+    this.basket.addEventListener('click', () => this.getBasketItems(books));
   }
 }
 
