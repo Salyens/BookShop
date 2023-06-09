@@ -1,4 +1,6 @@
 import { BookElement } from "./BookElement.js";
+import { BasketInner } from "./BasketInner.js";
+
 class BookShop {
   booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket")) || {
     sum: 0,
@@ -27,6 +29,20 @@ class BookShop {
     return bookElement.getBook;
   }
 
+  async createBasketInner(books, basketElemRef) {
+    const basketInner = new BasketInner(books, basketElemRef);
+    basketInner.createBasketList(this.basket, this.basketCounter);
+  }
+
+  backToHomePage(books) {
+    this.home.addEventListener("click", () => {
+      const contentContainer = document.querySelector("#container");
+      contentContainer.innerHTML = "";
+      contentContainer.style.cssText = "flex-direction: row;";
+      this.createInitialHTML(books);
+    });
+  }
+
   async getData() {
     const result = await fetch(this.apiBaseURL);
     let json;
@@ -45,6 +61,8 @@ class BookShop {
     if (this.booksIdInBasket.sum) this.displayItemsInBasket();
     const books = await this.getData();
     this.createInitialHTML(books);
+    this.backToHomePage(books);
+    this.createBasketInner(books, this.basketCounter);
   }
 }
 

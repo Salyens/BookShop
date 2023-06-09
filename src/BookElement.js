@@ -14,10 +14,9 @@ export class BookElement {
     bookImg.append(img);
 
     const bookPrice = document.createElement("div");
-    bookPrice.setAttribute("class", "book-price");
     const spanPrice = document.createElement("span");
     spanPrice.setAttribute("class", "price");
-    spanPrice.innerText = price;
+    spanPrice.innerText = `${price} $`;
     bookPrice.append(spanPrice);
 
     const bookName = document.createElement("p");
@@ -32,7 +31,7 @@ export class BookElement {
     const bookButton = document.createElement("button");
     bookButton.setAttribute("class", "book-btn");
     const spanButton = document.createElement("span");
-    spanButton.innerText = "Добавить в корзину";
+    spanButton.innerText = "Add to Basket";
     bookButton.append(spanButton);
 
     wrapper.append(bookImg);
