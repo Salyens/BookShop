@@ -1,60 +1,99 @@
+import { Helper } from "./Helper.js";
 export class Basket {
-    booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket")) || {
-        sum: 0
-    }
-    constructor(books, abc) {
-        this.books = books;
-        this.f = abc;
-    }
+  booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket")) || {
+    sum: 0,
+  };
+  constructor(books) {
+    this.books = books;
+  }
 
-    createTR() {
+  createListHTML(book) {
+    const container = document.querySelector("#container");
+    const th = document.querySelector("th");
+    let table = document.querySelector("table");
+    let id;
+    let name;
+    let quantity;
+    let price;
+    let subtotal;
+    let total = 0;
+    const helper = new Helper("222");
 
-    }
+    if (!table) table = document.createElement("table");
 
-    createListHTML() {
-        const table = document.createElement("table");
+    const createHeader = () => {
+      if (!th) {
+        helper.createCell(
+          container,
+          table,
+          "th",
+          "Id",
+          "Product name",
+          "Quantity",
+          "Price",
+          "Subtotal"
+        );
+      }
+    };
+    createHeader();
 
-      const createTR = (thId, thName, thQuantity, thPrice, thSubtotal) => {
-        const tr = document.createElement("tr");
-        const thIdEl = document.createElement("th");
-        const thNameEl = document.createElement("th");
-        const thQuantityEl = document.createElement("th");
-        const quantitySpan = document.createElement("span");
-        const quantityPlus = document.createElement("span");
-        const quantityMinus = document.createElement("span");
-        const thPriceEl = document.createElement("th");
-        const thSubtotalEl = document.createElement("th");
+    const createTD = () => {
+      for (const key in book) {
+        id = book.id;
+        name = book.name;
+        quantity = book.amount;
+        price = book.price;
+        subtotal = price * quantity;
+      }
+      total += subtotal;
+
+      helper.createCell(
+        container,
+        table,
+        "td",
+        id,
+        name,
+        quantity,
+        price,
+        subtotal
+      );
+    };
+    createTD();
+
+    const createTotal = () => {
+      const subtotals = document.querySelectorAll(".subtotal");
+    
+      helper.createTotalPrice(subtotals, container);
+    };
+    createTotal();
+  }
+
+  listenMinus() {
+    let quantityMinus = document.querySelectorAll(".quantity-minus");
+    for (const el of quantityMinus) {
+      el.addEventListener("click", (event) => {
+        const idBook =
+          event.target.parentElement.parentElement.parentElement.getAttribute(
+            "id"
+          );
+        let quantity = event.target.parentElement.parentElement;
+        let quantityAmount = quantity.querySelector(".quantity-amount");
         
-        thIdEl.innerText = thId;
-        thNameEl.innerText = thName;
-        quantitySpan.innerText = thQuantity;
-        thQuantityEl.setAttribute("class", "quantity");
-        thQuantityEl.append(quantitySpan);
-
-        if (thId !== "Id") tr.setAttribute("id", thId);
-        if (thQuantity !== "Quantity") {
-          quantityMinus.innerHTML = '<i class="fa-solid fa-minus"></i>';
-          quantityPlus.innerHTML = '<i class="fa-solid fa-plus"></i>';
-
-          quantityPlus.setAttribute("class", "quantity-plus");
-          quantityMinus.setAttribute("class", "quantity-minus");
-
-          thQuantityEl.append(quantityMinus);
-          thQuantityEl.append(quantityPlus);
+        this.booksIdInBasket[idBook]--;
+        this.booksIdInBasket.sum--;
+        if(this.booksIdInBasket[idBook] < 1) {
+          let tr = quantity.parentElement;
+          tr.remove();
+          delete this.booksIdInBasket[idBook];
+          console.log(this.booksIdInBasket)
         }
+        quantityAmount.innerText = this.booksIdInBasket[idBook];
 
-        thPriceEl.innerText = thPrice;
-        thSubtotalEl.setAttribute("class", "subtotal");
-        thSubtotalEl.innerText = thSubtotal;
-
-        tr.append(thIdEl);
-        tr.append(thNameEl);
-        tr.append(thQuantityEl);
-        tr.append(thPriceEl);
-        tr.append(thSubtotalEl);
-
-        table.append(tr);
-        contentContainer.append(table);
+        console.log(this.booksIdInBasket);
+        localStorage.setItem("booksIdInBasket", JSON.stringify(this.booksIdInBasket));
+      });
     }
-    }
+  }
+
+  
 }

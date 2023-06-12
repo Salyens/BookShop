@@ -32,7 +32,7 @@ export class BookElement {
     const bookButton = document.createElement("button");
     bookButton.setAttribute("class", "book-btn");
     const spanButton = document.createElement("span");
-    spanButton.innerText = "Добавить в корзину";
+    spanButton.innerText = "Add to Basket";
     bookButton.append(spanButton);
 
     wrapper.append(bookImg);

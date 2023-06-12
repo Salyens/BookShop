@@ -1,5 +1,6 @@
 import { BookElement } from "./BookElement.js";
 import { Basket } from "./Basket.js";
+import { Helper } from "./Helper.js";
 class BookShop {
   booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket")) || {
     sum: 0,
@@ -29,17 +30,19 @@ class BookShop {
   }
 
   getBasketItems(books) {
+    const container = document.querySelector('#container');
+    container.innerHTML = '';
     const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"))
     const bookIds = Object.keys(booksIdInBasket);
     const filteredBooks = books.filter(book => bookIds.includes(book.id));
     const booksListInBasket = filteredBooks.map((book) => {
       const amount = booksIdInBasket[book.id];
       book['amount'] = amount;
+      const basket = new Basket(books);
+      basket.createListHTML(book); 
+      basket.listenMinus(book); 
       return book;
     })
-    const {abc} = this;
-    const basket = new Basket(books, abc);
-    console.log(basket.f());
   }
 
   async getData() {
@@ -56,15 +59,17 @@ class BookShop {
     this.basketCounter.style.cssText = "display: flex;";
   }
 
-  abc() {
-    console.log('abc')
-  }
+  // abc(books) {
+  //   const helper = new Helper(books);
+  //   // bookElement.addItemToBasket(this.basketCounter);
+  // }
 
   async start() {
     if (this.booksIdInBasket.sum) this.displayItemsInBasket();
     const books = await this.getData();
     this.createInitialHTML(books);
     this.basket.addEventListener('click', () => this.getBasketItems(books));
+
   }
 }
 
