@@ -1,8 +1,4 @@
 export class Helper {
-  total = 0
-  constructor(books) {
-    this.books = books;
-  }
   createCell(container, table, thORtd, id, name, quantity, price, subtotal) {
     const tr = document.createElement("tr");
     const idEl = document.createElement(thORtd);
@@ -20,6 +16,7 @@ export class Helper {
     priceEl.innerText = price;
     subtotalEl.innerText = subtotal;
 
+    priceEl.setAttribute("class", "priceEl");
     quantityEl.setAttribute("class", "quantity");
     quantityEl.append(quantitySpan);
     subtotalEl.setAttribute("class", "subtotal");
@@ -49,11 +46,8 @@ export class Helper {
 
   }
 
-  createTotalPrice(subtotals, container) {
-    for (const el of subtotals) {
-      if (Number(el.innerText)) this.total += +el.innerText;
-    }
-
+  createTotalPrice(total, container) {
+    console.log(total);
     const totalEl = document.querySelector("#total");
     if (totalEl) totalEl.remove();
 
@@ -61,7 +55,7 @@ export class Helper {
     totalDiv.setAttribute("id", "total");
 
     const totalPriceSpan = document.createElement("span");
-    totalPriceSpan.innerText = `Total: ${this.total}$`;
+    totalPriceSpan.innerText = `Total: ${total}$`;
     totalDiv.append(totalPriceSpan);
 
     container.append(totalDiv);

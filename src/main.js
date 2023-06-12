@@ -31,6 +31,7 @@ class BookShop {
 
   getBasketItems(books) {
     const container = document.querySelector('#container');
+    const basket = new Basket(books);
     container.innerHTML = '';
     const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"))
     const bookIds = Object.keys(booksIdInBasket);
@@ -38,11 +39,11 @@ class BookShop {
     const booksListInBasket = filteredBooks.map((book) => {
       const amount = booksIdInBasket[book.id];
       book['amount'] = amount;
-      const basket = new Basket(books);
       basket.createListHTML(book); 
-      basket.listenMinus(book); 
       return book;
     })
+    basket.createTotal();
+    basket.listenMinus(); 
   }
 
   async getData() {
@@ -69,7 +70,6 @@ class BookShop {
     const books = await this.getData();
     this.createInitialHTML(books);
     this.basket.addEventListener('click', () => this.getBasketItems(books));
-
   }
 }
 
