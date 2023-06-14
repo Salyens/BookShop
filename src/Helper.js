@@ -58,5 +58,5 @@ export class Helper {
 
     container.append(totalDiv);
     container.style.cssText = "flex-direction: column;";
-  };
+  }
 }
