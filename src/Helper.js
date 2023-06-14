@@ -43,11 +43,9 @@ export class Helper {
 
     table.append(tr);
     container.append(table);
-
   }
 
   createTotalPrice(total, container) {
-    console.log(total);
     const totalEl = document.querySelector("#total");
     if (totalEl) totalEl.remove();
 

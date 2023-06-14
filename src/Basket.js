@@ -5,38 +5,32 @@ export class Basket {
   };
   total = 0;
   helper = new Helper();
-  // constructor(books) {
-  //   this.books = books;
-  // }
+  table = document.createElement("table");
 
-  createListHTML(book) {
-    const container = document.querySelector("#container");
-    const th = document.querySelector("th");
-    let table = document.querySelector("table");
+  constructor(rootElement) {
+    this.rootElement = rootElement;
+  }
+
+  createHeader() {
+    this.helper.createCell(
+      this.rootElement,
+      this.table,
+      "th",
+      "Id",
+      "Product name",
+      "Quantity",
+      "Price",
+      "Subtotal"
+    );
+  }
+
+  createRow(book) {
     let id;
     let name;
     let quantity;
     let price;
     let subtotal;
     let total = 0;
-
-    if (!table) table = document.createElement("table");
-
-    const createHeader = () => {
-      if (!th) {
-        this.helper.createCell(
-          container,
-          table,
-          "th",
-          "Id",
-          "Product name",
-          "Quantity",
-          "Price",
-          "Subtotal"
-        );
-      }
-    };
-    createHeader();
 
     const createTD = () => {
       for (const key in book) {
@@ -49,8 +43,8 @@ export class Basket {
       total += subtotal;
 
       this.helper.createCell(
-        container,
-        table,
+        this.rootElement,
+        this.table,
         "td",
         id,
         name,
@@ -60,10 +54,7 @@ export class Basket {
       );
     };
     createTD();
-    // this.createTotal();
   }
-
-  countSubtotals() {}
 
   createTotal() {
     this.total = 0;
@@ -71,40 +62,49 @@ export class Basket {
     for (const el of subtotals) {
       if (Number(el.innerText)) this.total += +el.innerText;
     }
-    console.log(this.total);
-    this.helper.createTotalPrice(this.total, container);
+    this.helper.createTotalPrice(this.total, this.rootElement);
   }
 
-  changeAmount() {}
-
-  listenMinus() {
-    let quantityMinus = document.querySelectorAll(".quantity-minus");
-    for (const el of quantityMinus) {
-      el.addEventListener("click", (event) => {
-        let row = event.target.parentElement.parentElement.parentElement;
-        const idBook = row.getAttribute("id");
-        let quantityAmount = row.querySelector(".quantity-amount");
-        let subtotal = row.querySelector(".subtotal");
-        let price = +row.querySelectorAll("td")[3].innerText;
-
-        this.booksIdInBasket[idBook]--;
-        this.booksIdInBasket.sum--;
-
-        subtotal.innerText = price * this.booksIdInBasket[idBook];
-        this.createTotal();
-
-        if (this.booksIdInBasket[idBook] < 1) {
-          row.remove();
-          delete this.booksIdInBasket[idBook];
-        }
-
-        quantityAmount.innerText = this.booksIdInBasket[idBook];
-
-        localStorage.setItem(
-          "booksIdInBasket",
-          JSON.stringify(this.booksIdInBasket)
-        );
-      });
-    }
+  createPlusAndMinus(basketCounter) {
+    const changeAmount = (plusORminus) => {
+      let quantityItems;
+      if (plusORminus === "minus") {
+        quantityItems = document.querySelectorAll(".quantity-minus");
+      } else if (plusORminus === "plus") {
+        quantityItems = document.querySelectorAll(".quantity-plus");
+      }
+      for (const el of quantityItems) {
+        el.addEventListener("click", (event) => {
+          let row = event.target.parentElement.parentElement.parentElement;
+          const idBook = row.getAttribute("id");
+          let quantityAmount = row.querySelector(".quantity-amount");
+          let subtotal = row.querySelector(".subtotal");
+          let price = +row.querySelectorAll("td")[3].innerText;
+          if (plusORminus === "minus") {
+            this.booksIdInBasket[idBook]--;
+            this.booksIdInBasket.sum--;
+            if (this.booksIdInBasket[idBook] < 1) {
+              row.remove();
+              delete this.booksIdInBasket[idBook];
+            }
+          } else if (plusORminus === "plus") {
+            this.booksIdInBasket[idBook]++;
+            this.booksIdInBasket.sum++;
+          }
+          basketCounter.innerHTML = this.booksIdInBasket.sum;
+          if (this.booksIdInBasket.sum < 1)
+            basketCounter.style.cssText = "display: none;";
+          subtotal.innerText = price * this.booksIdInBasket[idBook];
+          quantityAmount.innerText = this.booksIdInBasket[idBook];
+          this.createTotal();
+          localStorage.setItem(
+            "booksIdInBasket",
+            JSON.stringify(this.booksIdInBasket)
+          );
+        });
+      }
+    };
+    changeAmount("minus");
+    changeAmount("plus");
   }
 }

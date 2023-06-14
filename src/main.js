@@ -7,6 +7,7 @@ class BookShop {
   };
   rootElement = document.querySelector("#container");
   apiBaseURL = "http://localhost:3000/books";
+
   constructor(buttons) {
     const { basket, addToBasket, home, basketCounter } = buttons;
     this.basket = document.querySelector(basket);
@@ -17,6 +18,7 @@ class BookShop {
 
   createInitialHTML(data) {
     this.rootElement.innerHTML = "";
+    this.rootElement.style.cssText = "flex-direction: row;";
     for (const el of data) {
       const book = this.createBookElement(el);
       this.rootElement.append(book);
@@ -30,20 +32,20 @@ class BookShop {
   }
 
   getBasketItems(books) {
-    const container = document.querySelector('#container');
-    const basket = new Basket(books);
-    container.innerHTML = '';
-    const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"))
+    const basket = new Basket(this.rootElement);
+    this.rootElement.innerHTML = "";
+    basket.createHeader();
+    const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"));
     const bookIds = Object.keys(booksIdInBasket);
-    const filteredBooks = books.filter(book => bookIds.includes(book.id));
+    const filteredBooks = books.filter((book) => bookIds.includes(book.id));
     const booksListInBasket = filteredBooks.map((book) => {
       const amount = booksIdInBasket[book.id];
-      book['amount'] = amount;
-      basket.createListHTML(book); 
+      book["amount"] = amount;
+      basket.createRow(book);
       return book;
-    })
+    });
     basket.createTotal();
-    basket.listenMinus(); 
+    basket.createPlusAndMinus(this.basketCounter);
   }
 
   async getData() {
@@ -60,16 +62,12 @@ class BookShop {
     this.basketCounter.style.cssText = "display: flex;";
   }
 
-  // abc(books) {
-  //   const helper = new Helper(books);
-  //   // bookElement.addItemToBasket(this.basketCounter);
-  // }
-
   async start() {
     if (this.booksIdInBasket.sum) this.displayItemsInBasket();
     const books = await this.getData();
     this.createInitialHTML(books);
-    this.basket.addEventListener('click', () => this.getBasketItems(books));
+    this.home.addEventListener("click", () => this.createInitialHTML(books));
+    this.basket.addEventListener("click", () => this.getBasketItems(books));
   }
 }
 
