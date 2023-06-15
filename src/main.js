@@ -17,7 +17,6 @@ class BookShop {
   }
 
   createInitialHTML(data) {
-    console.log("sss");
     this.rootElement.innerHTML = "";
     this.rootElement.style.cssText = "flex-direction: row;";
     for (const el of data) {
