@@ -11,49 +11,20 @@ export class Basket {
     this.rootElement = rootElement;
   }
 
-  createHeader() {
-    this.helper.createCell(
-      this.rootElement,
-      this.table,
-      "th",
-      "Id",
-      "Product name",
-      "Quantity",
-      "Price",
-      "Subtotal"
-    );
-  }
-
-  createRow(book) {
-    let id;
-    let name;
-    let quantity;
-    let price;
+  createRow(data, thORtd) {
     let subtotal;
-    let total = 0;
+    if (typeof data.price === "number" && typeof data.amount === "number") {
+      subtotal = data.price * data.amount;
+    } else subtotal = data.subtotal;
 
-    const createTD = () => {
-      for (const key in book) {
-        id = book.id;
-        name = book.name;
-        quantity = book.amount;
-        price = book.price;
-        subtotal = price * quantity;
-      }
-      total += subtotal;
-
-      this.helper.createCell(
-        this.rootElement,
-        this.table,
-        "td",
-        id,
-        name,
-        quantity,
-        price,
-        subtotal
-      );
+    const cellObj = {
+      id: data.id,
+      name: data.name,
+      quantity: data.amount,
+      price: data.price,
+      subtotal,
     };
-    createTD();
+    this.helper.createCell(this.rootElement, this.table, thORtd, cellObj);
   }
 
   createTotal() {

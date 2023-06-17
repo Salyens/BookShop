@@ -34,14 +34,23 @@ class BookShop {
   getBasketItems(books) {
     const basket = new Basket(this.rootElement);
     this.rootElement.innerHTML = "";
-    basket.createHeader();
+    const tableHeaderCell = {
+      id: "Id",
+      name: "Product name",
+      amount: "Quantity",
+      price: "Price",
+      subtotal: "Subtotal"
+    }
+    basket.createRow(tableHeaderCell, 'th');
     const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"));
     const bookIds = Object.keys(booksIdInBasket);
     const filteredBooks = books.filter((book) => bookIds.includes(book.id));
      filteredBooks.forEach((book) => {
       const amount = booksIdInBasket[book.id];
       book["amount"] = amount;
-      basket.createRow(book);
+
+      basket.createRow(book, 'td');
+
     });
     basket.createTotal();
     basket.createPlusAndMinus(this.basketCounter);

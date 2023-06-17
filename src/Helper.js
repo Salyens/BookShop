@@ -1,5 +1,5 @@
 export class Helper {
-  createCell(container, table, thORtd, id, name, quantity, price, subtotal) {
+  createCell(container, table, thORtd, cellObj) {
     const tr = document.createElement("tr");
     const idEl = document.createElement(thORtd);
     const nameEl = document.createElement(thORtd);
@@ -10,6 +10,7 @@ export class Helper {
     const priceEl = document.createElement(thORtd);
     const subtotalEl = document.createElement(thORtd);
 
+    const {id, name, quantity, price, subtotal} = cellObj;
     idEl.innerText = id;
     nameEl.innerText = name;
     quantitySpan.innerText = quantity;

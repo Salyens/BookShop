@@ -3,20 +3,20 @@
         {
             "id": "1", 
             "name": "Burn It Down", 
-            "price": "100", 
+            "price": 100, 
             "description": "Power, Complicity, and a Call for Change in Hollywood",
             "imgURL": "./img/1.webp"
         },
-        {"id": "2", "name": "Quietly Hostile", "price": "70", "description": "Quietly Hostile: Essays", "imgURL": "./img/2.webp"},
-        {"id": "3", "name": "Crying in H Mart", "price": "40", "description": "Crying in H Mart: A Memoir", "imgURL": "./img/3.webp"},
-        {"id": "4", "name": "Trust ", "price": "100", "description": "Pulitzer Prize Winner", "imgURL": "./img/4.webp"},
-        {"id": "5", "name": "Scaling People", "price": "150", "description": "Tactics for Management and Company Building", "imgURL": "./img/5.webp"},
-        {"id": "6", "name": "Raw Dog", "price": "90", "description": "The Naked Truth about Hot Dogs", "imgURL": "./img/6.webp"},
-        {"id": "7", "name": "Not Too Late", "price": "50", "description": "Changing the Climate Story from Despair to Possibility", "imgURL": "./img/7.webp"},
-        {"id": "8", "name": "Tough Titties", "price": "60", "description": "On Living Your Best Life When You're the F-Ing Worst", "imgURL": "./img/8.webp"},
-        {"id": "9", "name": "Yellowface", "price": "40", "description": "White lies. Dark humor. Deadly consequences... ", "imgURL": "./img/9.webp"},
-        {"id": "10", "name": "You Report to Me", "price": "70", "description": "Accountability for the Failing Administrative State", "imgURL": "./img/10.webp"},
-        {"id": "11", "name": "End Times", "price": "55", "description": "Elites, Counter-Elites, and the Path of Political Disintegration", "imgURL": "./img/11.webp"},
-        {"id": "12", "name": "Humanocracy", "price": "45", "description": "Creating Organizations as Amazing as the People Inside Them", "imgURL": "./img/12.webp"}
+        {"id": "2", "name": "Quietly Hostile", "price": 70, "description": "Quietly Hostile: Essays", "imgURL": "./img/2.webp"},
+        {"id": "3", "name": "Crying in H Mart", "price": 40, "description": "Crying in H Mart: A Memoir", "imgURL": "./img/3.webp"},
+        {"id": "4", "name": "Trust ", "price": 100, "description": "Pulitzer Prize Winner", "imgURL": "./img/4.webp"},
+        {"id": "5", "name": "Scaling People", "price": 150, "description": "Tactics for Management and Company Building", "imgURL": "./img/5.webp"},
+        {"id": "6", "name": "Raw Dog", "price": 90, "description": "The Naked Truth about Hot Dogs", "imgURL": "./img/6.webp"},
+        {"id": "7", "name": "Not Too Late", "price": 50, "description": "Changing the Climate Story from Despair to Possibility", "imgURL": "./img/7.webp"},
+        {"id": "8", "name": "Tough Titties", "price": 60, "description": "On Living Your Best Life When You're the F-Ing Worst", "imgURL": "./img/8.webp"},
+        {"id": "9", "name": "Yellowface", "price": 40, "description": "White lies. Dark humor. Deadly consequences... ", "imgURL": "./img/9.webp"},
+        {"id": "10", "name": "You Report to Me", "price": 70, "description": "Accountability for the Failing Administrative State", "imgURL": "./img/10.webp"},
+        {"id": "11", "name": "End Times", "price": 55, "description": "Elites, Counter-Elites, and the Path of Political Disintegration", "imgURL": "./img/11.webp"},
+        {"id": "12", "name": "Humanocracy", "price": 45, "description": "Creating Organizations as Amazing as the People Inside Them", "imgURL": "./img/12.webp"}
     ]
 }
