@@ -13,6 +13,7 @@ export class BookElement {
     img.src = imgURL;
     bookImg.append(img);
 
+
     const bookPrice = document.createElement("div");
     bookPrice.setAttribute("class", "book-price");
     const spanPrice = document.createElement("span");
@@ -32,7 +33,7 @@ export class BookElement {
     const bookButton = document.createElement("button");
     bookButton.setAttribute("class", "book-btn");
     const spanButton = document.createElement("span");
-    spanButton.innerText = "Добавить в корзину";
+    spanButton.innerText = "Add to Basket";
     bookButton.append(spanButton);
 
     wrapper.append(bookImg);
@@ -57,16 +58,18 @@ export class BookElement {
     return this._book;
   }
 
-  addItemToBasket (basketElemRef) {
-    this.getBookButton.addEventListener('click', () => {
-      const idWrapper = this._book.getAttribute('data-id');
-      const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket")) || {sum: 0};
-      if(booksIdInBasket[idWrapper]) booksIdInBasket[idWrapper]++;
+  addItemToBasket(basketElemRef) {
+    this.getBookButton.addEventListener("click", () => {
+      const idWrapper = this._book.getAttribute("data-id");
+      const booksIdInBasket = JSON.parse(
+        localStorage.getItem("booksIdInBasket")
+      ) || { sum: 0 };
+      if (booksIdInBasket[idWrapper]) booksIdInBasket[idWrapper]++;
       else booksIdInBasket[idWrapper] = 1;
       booksIdInBasket.sum++;
-      localStorage.setItem('booksIdInBasket', JSON.stringify(booksIdInBasket))
+      localStorage.setItem("booksIdInBasket", JSON.stringify(booksIdInBasket));
       basketElemRef.innerText = booksIdInBasket.sum;
-      basketElemRef.style.cssText = 'display: flex;';
-    })
+      basketElemRef.style.cssText = "display: flex;";
+    });
   }
 }
