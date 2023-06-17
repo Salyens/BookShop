@@ -38,11 +38,10 @@ class BookShop {
     const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"));
     const bookIds = Object.keys(booksIdInBasket);
     const filteredBooks = books.filter((book) => bookIds.includes(book.id));
-    const booksListInBasket = filteredBooks.map((book) => {
+     filteredBooks.forEach((book) => {
       const amount = booksIdInBasket[book.id];
       book["amount"] = amount;
       basket.createRow(book);
-      return book;
     });
     basket.createTotal();
     basket.createPlusAndMinus(this.basketCounter);
