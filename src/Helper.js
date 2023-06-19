@@ -1,4 +1,5 @@
 export class Helper {
+  clickedPage = 1;
   createCell(container, table, thORtd, cellObj) {
     const tr = document.createElement("tr");
     const idEl = document.createElement(thORtd);
@@ -10,7 +11,7 @@ export class Helper {
     const priceEl = document.createElement(thORtd);
     const subtotalEl = document.createElement(thORtd);
 
-    const {id, name, quantity, price, subtotal} = cellObj;
+    const { id, name, quantity, price, subtotal } = cellObj;
     idEl.innerText = id;
     nameEl.innerText = name;
     quantitySpan.innerText = quantity;
@@ -60,4 +61,18 @@ export class Helper {
     container.append(totalDiv);
     container.style.cssText = "flex-direction: column;";
   }
+
+  createPageNumbers(container, numbersAmount) {
+    const numbersWrapper = document.createElement("div");
+    numbersWrapper.setAttribute("id", "numbers-wrapper");
+
+    for (let i = 1; i < numbersAmount + 1; i++) {
+      const number = document.createElement("span");
+      number.setAttribute("class", "number");
+      number.innerText = i;
+      numbersWrapper.append(number);
+    }
+    container.append(numbersWrapper);
+  }
+
 }
