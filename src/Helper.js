@@ -62,17 +62,27 @@ export class Helper {
     container.style.cssText = "flex-direction: column;";
   }
 
-  createPageNumbers(container, numbersAmount) {
+  createPageNumbers(container, numbersAmount, page) {
     const numbersWrapper = document.createElement("div");
     numbersWrapper.setAttribute("id", "numbers-wrapper");
+    const arrowLeft = document.createElement("div");
+    arrowLeft.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+    arrowLeft.setAttribute("id", "arrow-left");
+    numbersWrapper.append(arrowLeft);
 
     for (let i = 1; i < numbersAmount + 1; i++) {
       const number = document.createElement("span");
       number.setAttribute("class", "number");
       number.innerText = i;
+      if(i === page) number.setAttribute("id", "active-number");
       numbersWrapper.append(number);
     }
+
+    const arrowRight = document.createElement("div");
+    arrowRight.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+    arrowRight.setAttribute("id", "arrow-right");
+    numbersWrapper.append(arrowRight);
+
     container.append(numbersWrapper);
   }
-
 }

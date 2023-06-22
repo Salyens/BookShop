@@ -8,7 +8,8 @@ class BookShop {
   };
   rootElement = document.querySelector("#container");
   apiBaseURL = "http://localhost:3000/books";
-  limit = 5;
+  limit = 3;
+  page = 1;
   helper = new Helper();
 
   constructor(buttons) {
@@ -19,38 +20,41 @@ class BookShop {
     this.basketCounter = document.querySelector(basketCounter);
   }
 
-  renderList(list){
+  createInitialHTML(list) {
     this.rootElement.innerHTML = "";
+    this.rootElement.style.cssText = "flex-direction: row;";
     for (const el of list) {
       const book = this.createBookElement(el);
       this.rootElement.append(book);
     }
-    const numberAmount = Math.ceil(this.totalBooks/this.limit);
-    this.helper.createPageNumbers(this.rootElement, numberAmount);
-    const numbers = document.querySelectorAll('.number');
-    for(const el of numbers) {
-      el.addEventListener('click', async () => {
-        const list = await this.getData({page: el.innerText})
-        this.renderList(list);
-      })
-    }
-  }
+    const numberAmount = Math.ceil(this.totalBooks / this.limit);
+    this.helper.createPageNumbers(this.rootElement, numberAmount, this.page);
+    const numbers = document.querySelectorAll(".number");
+    const arrowLeft = document.querySelector("#arrow-left");
+    const arrowRight = document.querySelector("#arrow-right");
 
-  createInitialHTML(data) {
-    this.rootElement.innerHTML = "";
-    this.rootElement.style.cssText = "flex-direction: row;";
-    for (const el of data) {
-      const book = this.createBookElement(el);
-      this.rootElement.append(book);
-    }
-    const numberAmount = Math.ceil(this.totalBooks/this.limit)
-    this.helper.createPageNumbers(this.rootElement, numberAmount)
-    const numbers = document.querySelectorAll('.number');
-    for(const el of numbers) {
-      el.addEventListener('click', async () => {
-        const list = await this.getData({page: el.innerText})
-        this.renderList(list);
-      })
+    arrowLeft.addEventListener("click", async () => {
+      if (this.page > 1) {
+        this.page--;
+        const list = await this.getData({ page: this.page });
+        this.createInitialHTML(list);
+      }
+    });
+
+    arrowRight.addEventListener("click", async () => {
+      if (this.page < numberAmount) {
+        this.page++;
+        const list = await this.getData({ page: this.page });
+        this.createInitialHTML(list);
+      }
+    });
+
+    for (const el of numbers) {
+      el.addEventListener("click", async () => {
+        this.page = +el.innerText;
+        const list = await this.getData({ page: this.page });
+        this.createInitialHTML(list);
+      });
     }
   }
 
@@ -68,18 +72,16 @@ class BookShop {
       name: "Product name",
       amount: "Quantity",
       price: "Price",
-      subtotal: "Subtotal"
-    }
-    basket.createRow(tableHeaderCell, 'th');
+      subtotal: "Subtotal",
+    };
+    basket.createRow(tableHeaderCell, "th");
     const booksIdInBasket = JSON.parse(localStorage.getItem("booksIdInBasket"));
     const bookIds = Object.keys(booksIdInBasket);
     const filteredBooks = books.filter((book) => bookIds.includes(book.id));
-     filteredBooks.forEach((book) => {
+    filteredBooks.forEach((book) => {
       const amount = booksIdInBasket[book.id];
       book["amount"] = amount;
-
-      basket.createRow(book, 'td');
-
+      basket.createRow(book, "td");
     });
     basket.createTotal();
     basket.createPlusAndMinus(this.basketCounter);
@@ -87,14 +89,14 @@ class BookShop {
 
   async getData(paramObj) {
     let request = [];
-    if(paramObj && Object.keys(paramObj).length) {
-      if(paramObj.page) {
-        request.push(`_page=${paramObj.page}`)
-      }
-      if(paramObj.limit) {
-        request.push(`_limit=${paramObj.limit}`)
-      }
-      else request.push(`_limit=${this.limit}`)
+    if (paramObj && Object.keys(paramObj).length) {
+      if (paramObj.page) {
+        request.push(`_page=${paramObj.page}`);
+      } else request.push(`_page=${this.page}`);
+
+      if (paramObj.limit) {
+        request.push(`_limit=${paramObj.limit}`);
+      } else request.push(`_limit=${this.limit}`);
     }
     request = request.join("&");
     const result = await fetch(`${this.apiBaseURL}?${request}`);
@@ -105,7 +107,6 @@ class BookShop {
     return json;
   }
 
-
   displayItemsInBasket() {
     this.basketCounter.innerText = this.booksIdInBasket.sum;
     this.basketCounter.style.cssText = "display: flex;";
@@ -115,10 +116,14 @@ class BookShop {
     if (this.booksIdInBasket.sum) this.displayItemsInBasket();
     const allBooks = await this.getData();
     this.totalBooks = allBooks.length;
-    const books = await this.getData({page: 1});
+    const books = await this.getData({ page: this.page });
+
     this.createInitialHTML(books);
-    this.home.addEventListener("click", () => this.createInitialHTML(books));
-    this.basket.addEventListener("click", () => this.getBasketItems(books));
+    this.home.addEventListener("click", () => {
+      this.page = 1;
+      this.createInitialHTML(books);
+    });
+    this.basket.addEventListener("click", () => this.getBasketItems(allBooks));
   }
 }
 
