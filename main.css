@@ -257,3 +257,8 @@ tr:first-child {
 #arrow-right:hover {
   color: rgb(251, 165, 5);
 }
+
+#search {
+  width: 20%;
+  margin: 30px auto;
+}
