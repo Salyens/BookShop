@@ -8,9 +8,7 @@ class BookShop {
   };
   rootElement = document.querySelector("#container");
   apiBaseURL = "http://localhost:3000/books";
-  // limit = 2;
-  // page = 1;
-  queryObject = {limit: 2, page: 1, q: null};
+  queryObject = { limit: 12, page: 1, q: null };
   helper = new Helper();
 
   constructor(buttons) {
@@ -21,7 +19,7 @@ class BookShop {
       basketCounter,
       searchInput,
       searchButton,
-      searchDiv
+      searchDiv,
     } = buttons;
     this.basket = document.querySelector(basket);
     this.addToBasket = document.querySelectorAll(addToBasket);
@@ -44,7 +42,11 @@ class BookShop {
     if (filteredBooksAmount)
       numberAmount = Math.ceil(filteredBooksAmount / this.queryObject.limit);
     else numberAmount = Math.ceil(this.totalBooks / this.queryObject.limit);
-    this.helper.createPageNumbers(this.rootElement, numberAmount, this.queryObject.page);
+    this.helper.createPageNumbers(
+      this.rootElement,
+      numberAmount,
+      this.queryObject.page
+    );
     const numbers = document.querySelectorAll(".number");
     const arrowLeft = document.querySelector("#arrow-left");
     const arrowRight = document.querySelector("#arrow-right");
@@ -75,8 +77,12 @@ class BookShop {
   }
 
   createBookElement(book) {
-    const bookElement = new BookElement(book);
-    bookElement.addItemToBasket(this.basketCounter);
+    const bookElement = new BookElement(
+      book,
+      this.basketCounter,
+      this.searchDiv
+    ); 
+    bookElement.addItemToBasket();
     return bookElement.getBook;
   }
 
@@ -105,21 +111,19 @@ class BookShop {
   }
 
   async getData(paramObj) {
-    console.log('paramObj: ', paramObj);
     let request = [];
     if (paramObj && Object.keys(paramObj).length) {
       if (paramObj.page) {
         request.push(`_page=${paramObj.page}`);
-      } 
-      else request.push(`_page=${this.queryObject.page}`);
+      } else request.push(`_page=${this.queryObject.page}`);
 
-      if(paramObj.q) request.push(`q=${paramObj.q}`);
+      if (paramObj.q) request.push(`q=${paramObj.q}`);
 
-      if (paramObj.limit)request.push(`_limit=${paramObj.limit}`);
+      if (paramObj.limit) request.push(`_limit=${paramObj.limit}`);
 
       request.push(`_sort=name`);
     }
-    
+
     request = request.join("&");
 
     const result = await fetch(`${this.apiBaseURL}?${request}`);
@@ -138,23 +142,25 @@ class BookShop {
     this.queryObject.q = searchInputValue;
     let limitedResult = await this.getData(this.queryObject);
     const searchResult = await this.getData({ q: searchInputValue });
-    console.log('searchResult: ', searchResult);
+    console.log("searchResult: ", searchResult);
     this.createInitialHTML(limitedResult, searchResult.length);
-
   }
 
   async start() {
+    // this.helper.createBanner();
     if (this.booksIdInBasket.sum) this.displayItemsInBasket();
     const allBooks = await this.getData();
     this.totalBooks = allBooks.length;
-    console.log(this.queryObject);
     const books = await this.getData(this.queryObject);
-
     this.createInitialHTML(books);
     this.home.addEventListener("click", () => {
-      window.location.href = "/"
+      window.location.href = "/";
     });
-    this.basket.addEventListener("click", () => this.getBasketItems(allBooks));
+    this.basket.addEventListener("click", () => {
+      this.getBasketItems(allBooks)
+      // const bannerDiv = document.querySelector("#best-books-header");
+      // bannerDiv.innerHTML = '';
+    });
     this.searchButton.addEventListener("click", () => {
       const { value: searchInputValue } = this.searchInput;
       this.search(searchInputValue);
@@ -169,7 +175,7 @@ const buttons = {
   basketCounter: "#basket-counter",
   searchInput: "#search-input",
   searchButton: "#search-btn",
-  searchDiv: "#search"
+  searchDiv: "#search",
 };
 
 const bookShop = new BookShop(buttons);

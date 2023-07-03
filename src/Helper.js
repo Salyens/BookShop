@@ -74,7 +74,7 @@ export class Helper {
       const number = document.createElement("span");
       number.setAttribute("class", "number");
       number.innerText = i;
-      if(i === page) number.setAttribute("id", "active-number");
+      if (i === page) number.setAttribute("id", "active-number");
       numbersWrapper.append(number);
     }
 
@@ -84,5 +84,23 @@ export class Helper {
     numbersWrapper.append(arrowRight);
 
     container.append(numbersWrapper);
+  }
+
+  createBanner() {
+    const main = document.querySelector("main");
+    let bannerDiv = document.querySelector("#best-books-header");
+    if (bannerDiv) return;
+    else bannerDiv = document.createElement("div");
+    bannerDiv.setAttribute("id", "best-books-header");
+    const bannerImg = document.createElement("img");
+    bannerImg.setAttribute("id", "best-books-header-img");
+    bannerImg.src =
+      "//dispatch.barnesandnoble.com/content/dam/ccr/global/global-nav-banner/2023/06/26815_BOTYSF_6-5.jpg";
+    bannerDiv.append(bannerImg);
+
+    const categoriesWrapper = document.createElement("div");
+    categoriesWrapper.setAttribute("id", "categories-wrapper");
+    
+    main.prepend(bannerDiv);
   }
 }
